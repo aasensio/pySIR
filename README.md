@@ -68,5 +68,6 @@ It returns:
 
 #### Files
 The following files are needed:
+
     - LINEAS: defines the available lines
     - THEVENIN: defines the abundances 
