@@ -1,6 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import sir
+import matplotlib.pyplot as pl
 
 __all__ = ["listLinesSIR", "initializeSIR", "synthesizeSIR"]
 
@@ -46,9 +47,18 @@ def initializeSIR(lines):
         f.write("{0}    :  {1}, {2}, {3}".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
     f.close()
         
-    return sir.init()    
+    return sir.init()
 
-def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0):
+def setPSF(xPSF, yPSF):
+    """Define the spectral PSF to be convolved with the profiles
+    
+    Args:
+        xPSF (float): wavelength with respect to the maximum (in mA) [nLambda]
+        yPSF (float): transmission for each wavelength displacement. It is not necessary to normalize it to unit area [nLambda]    
+    """
+    sir.setPSF(xPSF, yPSF)
+
+def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):
     """Carry out the synthesis and returns the Stokes parameters and the response 
     functions to all physical variables at all depths
     
@@ -65,19 +75,34 @@ def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0):
         macroturbulence (float, optional): macroturbulence velocity [km/s]. Default: 0
         fillingFactor (float, optional): filling factor. Default: 1
         stray (float, optional): stray light in %. Default: 0
+        returnRF (bool, optional): return response functions
     
     Returns:
         stokes: (float array) Stokes parameters, with the first index containing the wavelength displacement and the remaining
                                 containing I, Q, U and V. Size (5,nLambda)
-        rf: (float array) Response functions to T, Pe, vmic, B, v, theta, phi. Size (4,nLambda,nDepth)
+        rf: (float array) Response functions to T, Pe, vmic, B, v, theta, phi, all of size (4,nLambda,nDepth), plus the RF to macroturbulence of size (4,nLambda)
+                        It is not returned if returnRF=False
     """
-    stokes, rf = sir.synth(model, macroturbulence, fillingFactor, stray)
-
+    if (returnRF):
+        stokes, rf = sir.synthRF(model, macroturbulence, fillingFactor, stray)
+        return stokes, rf
+    else:
+        stokes, rf = sir.synth(model, macroturbulence, fillingFactor, stray)        
+        return stokes    
     return stokes, rf
 
 if (__name__ == "__main__"):
     listLinesSIR()
     l = [['1',-500.,10.,1500.]]
     nLambda = initializeSIR(l)
+    psf = np.loadtxt('PSF.dat', dtype=np.float32)
+    setPSF(psf[:,0].flatten(), psf[:,1].flatten())
     out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]
     stokes, rf = synthesizeSIR(out)
+
+    f, ax = pl.subplots(ncols=4, nrows=2, figsize=(16,6))
+    for i in range(4):
+        ax[0,i].plot(stokes[0,:], stokes[i+1,:])
+        ax[1,i].imshow(rf[0][i,:,:].T)
+
+    pl.tight_layout()
