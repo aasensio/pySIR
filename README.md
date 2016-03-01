@@ -2,13 +2,25 @@
 
 Python wrapper for the Stokes Inversion based on Response functions code by Ruiz Cobo &amp; del Toro Iniesta (1992)
 
-Example
+### Compilation
+Local compilation
+```python
+python setup.py build_ext --inplace
+```
+
+Systemwide installation
+```python
+python setup.py install
+```
+
+### Example
 
 ```python
+import pySIR
 pySIR.listLinesSIR()
 lines = [['1',-500.,10.,1500.]]
-nLambda = pySIR.initializeSIR(l)
-out = np.loadtxt('../test/modelo.mod', dtype=np.float32, skiprows=1)[:,0:8]
+nLambda = pySIR.initializeSIR(lines)
+out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]
 stokes, rf = pySIR.synthesizeSIR(out)
 ```
 
