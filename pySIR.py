@@ -93,7 +93,7 @@ def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, retu
         stokes, rf = sir.synthRF(model, macroturbulence, fillingFactor, stray)
         return stokes, rf
     else:
-        stokes, rf = sir.synth(model, macroturbulence, fillingFactor, stray)        
+        stokes = sir.synth(model, macroturbulence, fillingFactor, stray)        
         return stokes    
     return stokes, rf
 
