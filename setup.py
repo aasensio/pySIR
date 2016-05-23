@@ -75,7 +75,7 @@ def get_libgfortran_dir():
             continue
         return []
 
-pathGlobal = "sir/"
+pathGlobal = "pySIR/src/"
 
 # Monkey patch the compilers to treat Fortran files like C files.
 CCompiler.language_map['.f90'] = "c"
