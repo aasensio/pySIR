@@ -1,12 +1,13 @@
 from __future__ import print_function
 import numpy as np
-import sir
+from .pysir import *
 import matplotlib.pyplot as pl
-from ipdb import set_trace as stop
+import os.path
+import shutil
 
-__all__ = ["listLinesSIR", "initializeSIR", "synthesizeSIR"]
+__all__ = ["list_lines", "build_model", "initialize", "synthesize", "set_PSF"]
 
-def listLinesSIR():
+def list_lines():
     """List the lines available in SIR for synthesis
         
     """
@@ -18,7 +19,7 @@ def listLinesSIR():
     for l in lines[:-1]:
         print(l[:-1])
 
-def initializeSIR(lines):
+def initialize(lines):
     """Initialize the SIR synthesis code for a set of spectral lines
     
     Args:
@@ -47,19 +48,75 @@ def initializeSIR(lines):
     for i in range(len(lines)):
         f.write("{0}    :  {1}, {2}, {3}".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
     f.close()
+
+    if (not os.path.exists('LINEAS')):
+        local = str(__file__).split('/')
+        sdir = '/'.join(local[0:-2])+'/data'
+        shutil.copy(sdir+'/LINEAS', os.getcwd())
+
+    if (not os.path.exists('THEVENIN')):
+        local = str(__file__).split('/')
+        sdir = '/'.join(local[0:-2])+'/data'
+        shutil.copy(sdir+'/THEVENIN', os.getcwd())
         
     return sir.init()
 
-def setPSF(xPSF, yPSF):
+def _interpolateNodes(logTau, nodes, variable=None):
+    n = logTau.shape[0]
+
+    if (variable is None):
+        variable = np.zeros_like(logTau)
+
+    out = np.zeros_like(logTau)
+
+    if (len(nodes) == 1):
+        out = variable + nodes
+    
+    if (len(nodes) >= 2):
+        pos = np.linspace(0, n-1, len(nodes), dtype=int)
+        coeff = np.polyfit(logTau[pos], nodes, len(nodes)-1)
+        out = variable + np.polyval(coeff, logTau)
+    return out
+
+def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=None, nodes_thB=None, nodes_phiB=None,
+    var_T=None, var_vmic=None, var_B=None, var_v=None, var_thB=None, var_phiB=None):
+    """Build a SIR model given the nodes for all quantities
+
+    Args:
+        logTau (float): array with the log(tau) axis
+        nodes_T (list): list with the number of nodes for Temperature [K]
+        nodes_vmic (list): list with the number of nodes for microturbulent velocity [km/s]
+        nodes_B (list): list with the number of nodes for magnetic field strength [G]
+        nodes_v (list): list with the number of nodes for velocity [km/s]
+        nodes_thB (list): list with the number of nodes for inclination of magnetic field [deg]
+        nodes_phiB (list): list with the number of nodes for azimuth of magnetic field [deg]
+
+    Returns:
+        model (float): [nDepth x 7] array appropriate for synthesizing with SIR
+    """
+    n = len(logTau)
+    nodes = [nodes_T, nodes_vmic, nodes_B, nodes_v, nodes_thB, nodes_phiB]
+    variable = [var_T, var_vmic, var_B, var_v, var_thB, var_phiB]
+    model = np.zeros((n,6))
+    for i in range(6):
+        if (nodes[i] != None):
+            if (variable[i] is None):
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]))
+            else:
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), variable=variable[i])
+
+    return model
+
+def set_PSF(xPSF, yPSF):
     """Define the spectral PSF to be convolved with the profiles
     
     Args:
         xPSF (float): wavelength with respect to the maximum (in mA) [nLambda]
         yPSF (float): transmission for each wavelength displacement. It is not necessary to normalize it to unit area [nLambda]    
     """
-    sir.setPSF(xPSF, yPSF)
+    setPSF(xPSF, yPSF)
 
-def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):
+def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):
     """Carry out the synthesis and returns the Stokes parameters and the response 
     functions to all physical variables at all depths
     
@@ -90,26 +147,10 @@ def synthesizeSIR(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, retu
         model[-1,2] = 1.11634e-01        
 
     if (returnRF):
-        stokes, rf = sir.synthRF(model, macroturbulence, fillingFactor, stray)
+        stokes, rf = synthRF(model, macroturbulence, fillingFactor, stray)
         return stokes, rf
     else:
-        stokes = sir.synth(model, macroturbulence, fillingFactor, stray)        
+        stokes = synth(model, macroturbulence, fillingFactor, stray)        
         return stokes    
     return stokes, rf
 
-if (__name__ == "__main__"):
-    listLinesSIR()
-    l = [['1',-500.,10.,1500.]]
-    nLambda = initializeSIR(l)
-    psf = np.loadtxt('PSF.dat', dtype=np.float32)
-    setPSF(psf[:,0].flatten(), psf[:,1].flatten())
-    out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]
-    out = np.delete(out, 2, axis=1)    
-    stokes, rf = synthesizeSIR(out)
-
-    f, ax = pl.subplots(ncols=4, nrows=2, figsize=(16,6))
-    for i in range(4):
-        ax[0,i].plot(stokes[0,:], stokes[i+1,:])
-        ax[1,i].imshow(rf[0][i,:,:].T)
-
-    pl.tight_layout()

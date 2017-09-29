@@ -75,8 +75,6 @@ def get_libgfortran_dir():
             continue
         return []
 
-pathGlobal = "pySIR/src/"
-
 # Monkey patch the compilers to treat Fortran files like C files.
 CCompiler.language_map['.f90'] = "c"
 UnixCCompiler.src_extensions.append(".f90")
@@ -87,13 +85,12 @@ UnixCCompiler.src_extensions.append(".f")
   # VERSION = fh.read().strip()
 DOCSTRING = __doc__.strip().split("\n")
 
-# SIR
-path = pathGlobal
+pathGlobal = "pysir/src/"
 
 listFiles = glob.glob(pathGlobal+'*.f*')
-listFiles.append(pathGlobal+'pySIR.pyx')
+listFiles.append(pathGlobal+'pysir.pyx')
 
-libSIR = MyExtension('sir',
+libSIR = MyExtension('pysir.pysir',
                   libraries=["gfortran"],
                   library_dirs=get_libgfortran_dir(),
                   sources=listFiles,
