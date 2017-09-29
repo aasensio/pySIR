@@ -16,20 +16,20 @@ python setup.py install
 ### Example
 
 ```python
-import pySIR
-pySIR.listLinesSIR()
+import pysir
+pysir.listLines()
 lines = [['1',-500.,10.,1500.]]
-nLambda = pySIR.initializeSIR(lines)
+nLambda = pysir.initialize(lines)
 psf = np.loadtxt('PSF.dat', dtype=np.float32)
 setPSF(psf[:,0].flatten(), psf[:,1].flatten())
 out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]
-stokes, rf = pySIR.synthesizeSIR(out)
+stokes, rf = pysir.synthesize(out)
 ```
 
-#### listLinesSIR
+#### listLines
 Lists the lines available in SIR for synthesis
 
-#### initializeSIR(lines)
+#### initialize(lines)
 Initialize the SIR synthesis code for a set of spectral lines. It outputs the number of wavelength points to be synthesized.
     
 lines: list of lists containing the information for the lines to be synthesized
@@ -47,7 +47,7 @@ Define the spectral PSF to be convolved with the profiles. "lambda" is the displ
 the maximum in mA and "transmission" is the transmission of the PSF (it is normalized to unit area
 in the code).
     
-#### synthesizeSIR(model)
+#### synthesize(model)
 Carry out the synthesis and returns the Stokes parameters and the response functions to all physical variables at all depths.
     
     model (float array): an array of size [nDepth x 8], where the columns contain the depth stratification of:
