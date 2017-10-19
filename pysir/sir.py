@@ -46,7 +46,7 @@ def initialize(lines):
     f.write("-----------------------------------------------------------------------\n")
 
     for i in range(len(lines)):
-        f.write("{0}    :  {1}, {2}, {3}".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
+        f.write("{0}    :  {1}, {2}, {3}\n".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
     f.close()
 
     if (not os.path.exists('LINEAS')):
@@ -59,7 +59,7 @@ def initialize(lines):
         sdir = '/'.join(local[0:-2])+'/data'
         shutil.copy(sdir+'/THEVENIN', os.getcwd())
         
-    return sir.init()
+    return init()
 
 def _interpolateNodes(logTau, nodes, variable=None):
     n = logTau.shape[0]
@@ -99,7 +99,7 @@ def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=Non
     variable = [var_T, var_vmic, var_B, var_v, var_thB, var_phiB]
     model = np.zeros((n,6))
     for i in range(6):
-        if (nodes[i] != None):
+        if (nodes[i] is not None):
             if (variable[i] is None):
                 model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]))
             else:

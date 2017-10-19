@@ -98,7 +98,7 @@ libSIR = MyExtension('pysir.pysir',
 
 
 setup_config = dict(
-    name='pySIR',
+    name='pysir',
     version='1.0',
     description=DOCSTRING[0],
     long_description="\n".join(DOCSTRING[2:]),
