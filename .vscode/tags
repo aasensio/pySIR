@@ -1,0 +1,88 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CCompiler	../setup.py	/^from distutils.ccompiler import CCompiler$/;"	kind:namespace	line:6
+CompileError	../setup.py	/^from distutils.errors import DistutilsExecError, CompileError$/;"	kind:namespace	line:7
+DOCSTRING	../setup.py	/^DOCSTRING = __doc__.strip().split("\\n")$/;"	kind:variable	line:86
+DistutilsExecError	../setup.py	/^from distutils.errors import DistutilsExecError, CompileError$/;"	kind:namespace	line:7
+Extension	../setup.py	/^from setuptools.extension import Extension$/;"	kind:namespace	line:10
+MyExtension	../setup.py	/^class MyExtension(Extension):$/;"	kind:class	line:52
+PIPE	../setup.py	/^from subprocess import Popen, PIPE$/;"	kind:namespace	line:14
+Popen	../setup.py	/^from subprocess import Popen, PIPE$/;"	kind:namespace	line:14
+UnixCCompiler	../setup.py	/^from distutils.unixccompiler import UnixCCompiler$/;"	kind:namespace	line:8
+__all__	../pysir/sir.py	/^__all__ = ["list_lines", "build_model", "initialize", "synthesize", "set_PSF"]$/;"	kind:variable	line:8
+__init__	../setup.py	/^    def __init__(self, *args, **kwargs):$/;"	kind:member	line:53
+__init__.py	../pysir/__init__.py	1;"	kind:file	line:1
+_compile	../setup.py	/^def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):$/;"	kind:function	line:20
+_interpolateNodes	../pysir/sir.py	/^def _interpolateNodes(logTau, nodes, variable=None):$/;"	kind:function	line:64
+append	../setup.py	/^    def append(self, object):$/;"	kind:member	line:48
+ar	../pysir/src/pysir.pyx	/^from numpy cimport ndarray as ar$/;"	kind:namespace	line:1
+ascontiguousarray	../pysir/src/pysir.pyx	/^from numpy import empty, ascontiguousarray$/;"	kind:namespace	line:2
+author	../setup.py	/^    author=' A. Asensio Ramos',$/;"	kind:variable	line:105
+author_email	../setup.py	/^    author_email='aasensio@iac.es',$/;"	kind:variable	line:106
+build_model	../pysir/sir.py	/^def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=None, nodes_thB=None, nodes_phiB=None,$/;"	kind:function	line:81
+classifiers	../setup.py	/^    classifiers=[$/;"	kind:variable	line:114
+description	../setup.py	/^    description=DOCSTRING[0],$/;"	kind:variable	line:103
+empty	../pysir/src/pysir.pyx	/^from numpy import empty, ascontiguousarray$/;"	kind:namespace	line:2
+example.py	../example.py	1;"	kind:file	line:1
+ext_modules	../setup.py	/^    ext_modules=[libSIR],$/;"	kind:variable	line:113
+finallist	../setup.py	/^class finallist(list):$/;"	kind:class	line:47
+find_packages	../setup.py	/^from setuptools import find_packages, setup$/;"	kind:namespace	line:9
+get_libgfortran_dir	../setup.py	/^def get_libgfortran_dir():$/;"	kind:function	line:58
+glob	../setup.py	/^import glob$/;"	kind:namespace	line:17
+include_dirs	../setup.py	/^                  include_dirs=[numpy.get_include()])$/;"	kind:variable	line:97
+include_package_data	../setup.py	/^    include_package_data=True,$/;"	kind:variable	line:132
+init	../pysir/src/pysir.pyx	/^def init():$/;"	kind:function	line:14
+initialize	../pysir/sir.py	/^def initialize(lines):$/;"	kind:function	line:22
+install_requires	../setup.py	/^    install_requires=[$/;"	kind:variable	line:110
+keywords	../setup.py	/^    keywords=['SIR', 'radiative transfer'],$/;"	kind:variable	line:129
+l	../example.py	/^l = [['1',-500.,10.,1500.]]$/;"	kind:variable	line:6
+libSIR	../setup.py	/^libSIR = MyExtension('pysir.pysir',$/;"	kind:variable	line:93
+libraries	../setup.py	/^                  libraries=["gfortran"],$/;"	kind:variable	line:94
+library_dirs	../setup.py	/^                  library_dirs=get_libgfortran_dir(),$/;"	kind:variable	line:95
+license	../setup.py	/^    license='GNU General Public License, version 3 (GPLv3)',$/;"	kind:variable	line:108
+listFiles	../setup.py	/^listFiles = glob.glob(pathGlobal+'*.f*')$/;"	kind:variable	line:90
+list_lines	../pysir/sir.py	/^def list_lines():$/;"	kind:function	line:10
+long_description	../setup.py	/^    long_description="\\n".join(DOCSTRING[2:]),$/;"	kind:variable	line:104
+matplotlib	../example.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:2
+matplotlib	../pysir/sir.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:4
+nLambda	../example.py	/^nLambda = pysir.initialize(l)$/;"	kind:variable	line:7
+name	../setup.py	/^    name='pysir',$/;"	kind:variable	line:101
+np	../example.py	/^import numpy as np$/;"	kind:namespace	line:1
+np	../pysir/sir.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../pysir/src/pysir.pyx	/^import numpy as np$/;"	kind:namespace	line:3
+numpy	../setup.py	/^import numpy$/;"	kind:namespace	line:16
+os	../pysir/sir.py	/^import os.path$/;"	kind:namespace	line:5
+os	../setup.py	/^import os$/;"	kind:namespace	line:12
+out	../example.py	/^out = np.delete(out, 2, axis=1)    $/;"	kind:variable	line:11
+out	../example.py	/^out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]$/;"	kind:variable	line:10
+package_data	../setup.py	/^    package_data = {'pySIR': [os.path.join('data', '*')]}$/;"	kind:variable	line:133
+packages	../setup.py	/^    packages=find_packages(),$/;"	kind:variable	line:130
+path	../pysir/sir.py	/^import os.path$/;"	kind:namespace	line:5
+pathGlobal	../setup.py	/^pathGlobal = "pysir\/src\/"$/;"	kind:variable	line:88
+pl	../example.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:2
+pl	../pysir/sir.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:4
+platform	../setup.py	/^import platform$/;"	kind:namespace	line:13
+platforms	../setup.py	/^    platforms='OS Independent',$/;"	kind:variable	line:109
+print_function	../pysir/sir.py	/^from __future__ import print_function$/;"	kind:namespace	line:1
+psf	../example.py	/^psf = np.loadtxt('PSF.dat', dtype=np.float32)$/;"	kind:variable	line:8
+pysir	../example.py	/^import pysir$/;"	kind:namespace	line:3
+pysir.pyx	../pysir/src/pysir.pyx	1;"	kind:file	line:1
+setPSF	../pysir/src/pysir.pyx	/^def setPSF(ar[float, ndim=1] xPSF, ar[float, ndim=1] yPSF):$/;"	kind:function	line:26
+set_PSF	../pysir/sir.py	/^def set_PSF(xPSF, yPSF):$/;"	kind:function	line:110
+setup	../setup.py	/^from setuptools import find_packages, setup$/;"	kind:namespace	line:9
+setup.py	../setup.py	1;"	kind:file	line:1
+setup_config	../setup.py	/^setup_config = dict($/;"	kind:variable	line:100
+shutil	../pysir/sir.py	/^import shutil$/;"	kind:namespace	line:6
+sir.py	../pysir/sir.py	1;"	kind:file	line:1
+sources	../setup.py	/^                  sources=listFiles,$/;"	kind:variable	line:96
+synth	../pysir/src/pysir.pyx	/^def synth(ar[float, ndim=2] modelIn, float macroturbulence, float filling, float stray):$/;"	kind:function	line:34
+synthRF	../pysir/src/pysir.pyx	/^def synthRF(ar[float, ndim=2] modelIn, float macroturbulence, float filling, float stray):$/;"	kind:function	line:49
+synthesize	../pysir/sir.py	/^def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):$/;"	kind:function	line:119
+sys	../setup.py	/^import sys$/;"	kind:namespace	line:15
+url	../setup.py	/^    url='https:\/\/github.com\/aasensio\/pyiacsun',$/;"	kind:variable	line:107
+version	../setup.py	/^    version='1.0',$/;"	kind:variable	line:102
+zip_safe	../setup.py	/^    zip_safe=False,$/;"	kind:variable	line:131
