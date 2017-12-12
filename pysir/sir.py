@@ -4,6 +4,7 @@ from .pysir import *
 import matplotlib.pyplot as pl
 import os.path
 import shutil
+from scipy.interpolate import PchipInterpolator
 
 __all__ = ["list_lines", "build_model", "initialize", "synthesize", "set_PSF"]
 
@@ -61,13 +62,19 @@ def initialize(lines):
         
     return init()
 
-def _interpolateNodes(logTau, nodes, variable=None):
+def _interpolateNodes(logTau, nodes, nodes_logtau=None, variable=None):
     n = logTau.shape[0]
 
     if (variable is None):
         variable = np.zeros_like(logTau)
 
     out = np.zeros_like(logTau)
+
+    if (nodes_logtau is not None):
+        ind = np.argsort(nodes_logtau)
+        spl = PchipInterpolator(nodes_logtau[ind], nodes[ind], extrapolate=True)
+        out = spl(logTau)
+        return out
 
     if (len(nodes) == 1):
         out = variable + nodes
@@ -78,18 +85,20 @@ def _interpolateNodes(logTau, nodes, variable=None):
         out = variable + np.polyval(coeff, logTau)
     return out
 
-def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=None, nodes_thB=None, nodes_phiB=None,
+def build_model(logTau, nodes_logtau=None, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=None, nodes_thB=None, nodes_phiB=None,
     var_T=None, var_vmic=None, var_B=None, var_v=None, var_thB=None, var_phiB=None):
     """Build a SIR model given the nodes for all quantities
 
     Args:
-        logTau (float): array with the log(tau) axis
+        logTau (float): array with the output log(tau) axis
+        nodes_logtau (float): log(tau) position of the nodes
         nodes_T (list): list with the number of nodes for Temperature [K]
         nodes_vmic (list): list with the number of nodes for microturbulent velocity [km/s]
         nodes_B (list): list with the number of nodes for magnetic field strength [G]
         nodes_v (list): list with the number of nodes for velocity [km/s]
         nodes_thB (list): list with the number of nodes for inclination of magnetic field [deg]
         nodes_phiB (list): list with the number of nodes for azimuth of magnetic field [deg]
+        var_T (list): list with the temperature to be added to the interpolation of the nodes
 
     Returns:
         model (float): [nDepth x 7] array appropriate for synthesizing with SIR
@@ -101,9 +110,9 @@ def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=Non
     for i in range(6):
         if (nodes[i] is not None):
             if (variable[i] is None):
-                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]))
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), nodes_logtau=nodes_logtau)
             else:
-                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), variable=variable[i])
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), nodes_logtau=nodes_logtau, variable=variable[i])
 
     return model
 

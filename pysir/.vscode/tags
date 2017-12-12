@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+__all__	../sir.py	/^__all__ = ["list_lines", "build_model", "initialize", "synthesize", "set_PSF"]$/;"	kind:variable	line:8
+__init__.py	../__init__.py	1;"	kind:file	line:1
+_interpolateNodes	../sir.py	/^def _interpolateNodes(logTau, nodes, variable=None):$/;"	kind:function	line:64
+ar	../src/pysir.pyx	/^from numpy cimport ndarray as ar$/;"	kind:namespace	line:1
+ascontiguousarray	../src/pysir.pyx	/^from numpy import empty, ascontiguousarray$/;"	kind:namespace	line:2
+build_model	../sir.py	/^def build_model(logTau, nodes_T=None, nodes_vmic=None, nodes_B=None, nodes_v=None, nodes_thB=None, nodes_phiB=None,$/;"	kind:function	line:81
+empty	../src/pysir.pyx	/^from numpy import empty, ascontiguousarray$/;"	kind:namespace	line:2
+init	../src/pysir.pyx	/^def init():$/;"	kind:function	line:14
+initialize	../sir.py	/^def initialize(lines):$/;"	kind:function	line:22
+list_lines	../sir.py	/^def list_lines():$/;"	kind:function	line:10
+matplotlib	../sir.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:4
+np	../sir.py	/^import numpy as np$/;"	kind:namespace	line:2
+np	../src/pysir.pyx	/^import numpy as np$/;"	kind:namespace	line:3
+os	../sir.py	/^import os.path$/;"	kind:namespace	line:5
+path	../sir.py	/^import os.path$/;"	kind:namespace	line:5
+pl	../sir.py	/^import matplotlib.pyplot as pl$/;"	kind:namespace	line:4
+print_function	../sir.py	/^from __future__ import print_function$/;"	kind:namespace	line:1
+pysir.pyx	../src/pysir.pyx	1;"	kind:file	line:1
+setPSF	../src/pysir.pyx	/^def setPSF(ar[float, ndim=1] xPSF, ar[float, ndim=1] yPSF):$/;"	kind:function	line:26
+set_PSF	../sir.py	/^def set_PSF(xPSF, yPSF):$/;"	kind:function	line:110
+shutil	../sir.py	/^import shutil$/;"	kind:namespace	line:6
+sir.py	../sir.py	1;"	kind:file	line:1
+synth	../src/pysir.pyx	/^def synth(ar[float, ndim=2] modelIn, float macroturbulence, float filling, float stray):$/;"	kind:function	line:34
+synthRF	../src/pysir.pyx	/^def synthRF(ar[float, ndim=2] modelIn, float macroturbulence, float filling, float stray):$/;"	kind:function	line:49
+synthesize	../sir.py	/^def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):$/;"	kind:function	line:119

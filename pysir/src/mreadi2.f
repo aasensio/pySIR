@@ -250,7 +250,9 @@ c _____________________________________________________________________________
 
 	include 'PARAMETER'
 	real*4 x(50)
-	character dato*80,linea*80,dat*13,d*1
+	character(len=80) dato,linea
+	character(len=13) dat
+	character(len=1) d
 	integer n(*),blanco,ican,numblends,ierror
 	real*4 ini,paso,fin
 
