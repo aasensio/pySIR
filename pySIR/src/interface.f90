@@ -145,9 +145,9 @@ contains
 	real(c_float), intent(in) :: model(8,ndepth)
 	real(c_float), intent(in) :: macroturbulence, filling, stray
 	real(c_float), intent(out) :: stokes(5,nLambda)
-	real(c_float), intent(out), dimension(4,nLambda,nDepth) :: RFt, RFp, RFh, RFv, RFg, RFf, RFmic
+	real(c_float), intent(out), dimension(4,nLambda,nDepth) :: RFt, RFp, RFh, RFv, RFg, RFf, RFmic	
 	real(c_float), intent(out), dimension(4,nLambda) :: RFmac
-
+	
 	real*4 stok(kld4)
     real*4 rt(kldt4),rp(kldt4),rh(kldt4),rv(kldt4)
     real*4 rg(kldt4),rf(kldt4),rm(kldt4), rmac(kld4)
@@ -257,8 +257,7 @@ contains
 			RFmic(1,:,itau) = rm(1+4*ntot*(itau-1):ntot+4*ntot*(itau-1))
 			RFmic(2,:,itau) = rm(ntot+1+4*ntot*(itau-1):2*ntot+4*ntot*(itau-1))
 			RFmic(3,:,itau) = rm(2*ntot+1+4*ntot*(itau-1):3*ntot+4*ntot*(itau-1))
-			RFmic(4,:,itau) = rm(3*ntot+1+4*ntot*(itau-1):4*ntot+4*ntot*(itau-1))
-			
+			RFmic(4,:,itau) = rm(3*ntot+1+4*ntot*(itau-1):4*ntot+4*ntot*(itau-1))			
 		enddo
 
 		RFmac(1,:) = rmac(1:ntot)

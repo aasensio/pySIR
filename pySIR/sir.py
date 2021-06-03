@@ -47,7 +47,7 @@ def initialize(lines):
     f.write("-----------------------------------------------------------------------\n")
 
     for i in range(len(lines)):
-        f.write("{0}    :  {1}, {2}, {3}\n".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
+        f.write("{0}            :  {1}, {2}, {3}\n".format(lines[i][0], lines[i][1], lines[i][2], lines[i][3]))
     f.close()
 
     if (not os.path.exists('LINEAS')):
@@ -116,6 +116,37 @@ def build_model(logTau, nodes_logtau=None, nodes_T=None, nodes_vmic=None, nodes_
 
     return model
 
+def build_model_cartesian(logTau, nodes_logtau=None, nodes_T=None, nodes_vmic=None, nodes_Bx=None, nodes_v=None, nodes_By=None, nodes_Bz=None,
+    var_T=None, var_vmic=None, var_B=None, var_v=None, var_thB=None, var_phiB=None):
+    """Build a SIR model given the nodes for all quantities
+
+    Args:
+        logTau (float): array with the output log(tau) axis
+        nodes_logtau (float): log(tau) position of the nodes
+        nodes_T (list): list with the number of nodes for Temperature [K]
+        nodes_vmic (list): list with the number of nodes for microturbulent velocity [km/s]
+        nodes_Bx (list): list with the number of nodes for magnetic field strength [G]
+        nodes_v (list): list with the number of nodes for velocity [km/s]
+        nodes_By (list): list with the number of nodes for inclination of magnetic field [deg]
+        nodes_Bz (list): list with the number of nodes for azimuth of magnetic field [deg]
+        var_T (list): list with the temperature to be added to the interpolation of the nodes
+
+    Returns:
+        model (float): [nDepth x 7] array appropriate for synthesizing with SIR
+    """
+    n = len(logTau)
+    nodes = [nodes_T, nodes_vmic, nodes_Bx, nodes_v, nodes_By, nodes_Bz]
+    variable = [var_T, var_vmic, var_B, var_v, var_thB, var_phiB]
+    model = np.zeros((n,6))
+    for i in range(6):
+        if (nodes[i] is not None):
+            if (variable[i] is None):
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), nodes_logtau=nodes_logtau)
+            else:
+                model[:,i] = _interpolateNodes(logTau, np.asarray(nodes[i]), nodes_logtau=nodes_logtau, variable=variable[i])
+
+    return model
+
 def set_PSF(xPSF, yPSF):
     """Define the spectral PSF to be convolved with the profiles
     
@@ -125,7 +156,7 @@ def set_PSF(xPSF, yPSF):
     """
     setPSF(xPSF, yPSF)
 
-def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True):
+def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnRF=True, cartesian=False):
     """Carry out the synthesis and returns the Stokes parameters and the response 
     functions to all physical variables at all depths
     
@@ -139,6 +170,18 @@ def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnR
             - Line-of-sight velocity [km/s]
             - Magnetic field inclination [deg]
             - Magnetic field azimuth [deg]
+
+        If cartesian=True
+        model (float array): an array of size [nDepth x 7] or [nDepth x 8], where the columns contain the depth stratification of:
+            - log tau
+            - Temperature [K]
+            - Electron pressure [dyn cm^-2]  (optional)
+            - Microturbulent velocity [km/s]
+            - Bx [G]
+            - Line-of-sight velocity [km/s]
+            - By [deg]
+            - Bz [deg]
+
         macroturbulence (float, optional): macroturbulence velocity [km/s]. Default: 0
         fillingFactor (float, optional): filling factor. Default: 1
         stray (float, optional): stray light in %. Default: 0
@@ -155,9 +198,17 @@ def synthesize(model, macroturbulence=0.0, fillingFactor=1.0, stray=0.0, returnR
 # Boundary condition for Pe
         model[-1,2] = 1.11634e-01        
 
+    if (cartesian):
+        Bx = model[:,4]
+        By = model[:,6]
+        Bz = model[:,7]
+        model[:,4] = np.sqrt(Bx**2 + By**2 + Bz**2)
+        model[:,6] = 180.0 / np.pi * np.arccos(Bz / (model[:,4] + 1e-8))      # Regularize in case B=0
+        model[:,7] = 180.0 / np.pi * np.arctan2(By, Bx)
+
     if (returnRF):
         stokes, rf = synthRF(model, macroturbulence, fillingFactor, stray)
-        return stokes, rf
+        return stokes, rf        
     else:
         stokes = synth(model, macroturbulence, fillingFactor, stray)        
         return stokes    

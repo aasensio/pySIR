@@ -71,3 +71,7 @@ The following files are needed:
 
     - LINEAS: defines the available lines
     - THEVENIN: defines the abundances 
+
+#### Dependencies
+    - cython
+    - gfortran_linux-64

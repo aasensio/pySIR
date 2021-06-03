@@ -253,7 +253,7 @@ c _____________________________________________________________________________
 	character(len=80) dato,linea
 	character(len=13) dat
 	character(len=1) d
-	integer n(*),blanco,ican,numblends,ierror
+	integer n(200),blanco,ican,numblends,ierror, caca
 	real*4 ini,paso,fin
 
 	common/canal/icanal
@@ -285,7 +285,6 @@ c _____________________________________________________________________________
 	leng=long-lcom
 	dato(1:leng-1)=linea(lcom+1:long-1)
 	dato(leng:leng)=';'
-c	print*,'dato vale',dato
 	ivar=1
 	ii=0 
 	dat(1:13)='             ' 
@@ -301,7 +300,7 @@ c	print*,'dato vale',dato
 	      dat(ii:ii)=d
 	   else
               if(ii.eq.0)goto 11                
-              ii=0
+              ii=0			  
               read (dat,'(i13)') n(ivar)
 	      ivar=ivar+1
 	      dat(1:13)='             '      

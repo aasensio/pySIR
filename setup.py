@@ -22,7 +22,7 @@ def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
     arch = platform.architecture()[0].lower()
     if (ext == ".f" or ext == ".f90"):
         if sys.platform == 'darwin' or sys.platform.startswith('linux'):
-            compiler_so = ["gfortran"]
+            compiler_so = [os.environ['FC']]
             if (ext == ".f90"):
                 cc_args = ["-O3", "-fPIC", "-c", "-ffree-form", "-ffree-line-length-none"]
             if (ext == ".f"):
