@@ -23,14 +23,15 @@ c pn=presion de los neutros
 
 
 c	ahora calculo las funciones de particion u0,u1,u2 y sus derivadas
-        do 5 i=1,ncontr
+        do i=1,ncontr
       		iii=i
 5     		call neldatb(iii,0.,pesos(i),alfai(i),chi1(i),chi2(i))
-6       do 4 i=1,ncontr
+        end do
+6       do i=1,ncontr
       	  iii=i
 	  t0=t
      	  call nelfctb(iii,t0,u0(iii),u1(iii),u2(iii),du0,du1,du2)
-4       end do
+       end do
       
         g2=sahadouble(thetad,chi1(1),u0(1),u1(1),pe)   ! p(h+)/p(h)
         g3=1./sahadouble(thetad,0.754,1.,u0(1),pe)     ! p(h-)/p(h)

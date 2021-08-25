@@ -57,9 +57,9 @@ contains
 	end subroutine c_setpsf
 
 
-	subroutine c_synth(nDepth, nLambda,  macroturbulence, filling, stray, model, stokes) bind(c)
-	integer(c_int), intent(in) :: nDepth, nLambda
-	real(c_float), intent(in) :: model(8,ndepth)
+	subroutine c_synth(nDepth, nLambda, nLines, macroturbulence, filling, stray, model, departure, stokes) bind(c)
+	integer(c_int), intent(in) :: nDepth, nLambda, nLines
+	real(c_float), intent(in) :: model(8,ndepth), departure(2, nLines, nDepth)
 	real(c_float), intent(in) :: macroturbulence, filling, stray
 	real(c_float), intent(out) :: stokes(5,nLambda)
 	
@@ -74,6 +74,10 @@ contains
 	real*4 atmosmodel(kt8), pesostray
 	real*4 tau(kt),t(kt),pe(kt),pg(kt),z(kt),ro(kt)
 	real*4 voffset,xmu
+	real*4 beta1(kl,kt),beta2(kl,kt)
+
+	integer :: ixx, ible, nlte
+
 	common/Malla/ntl,nlin,npas,nble,dlamda  !common para StokesFRsub
     common/OutputStokes/Stokesfilename
 
@@ -81,6 +85,9 @@ contains
 	common/numeronodos/mnodos         !para StokesFRsub
     common/offset/voffset             !para StokesFRsub
     common/anguloheliocent/xmu        !para StokesFRsub
+	common/nlte/nlte
+    common/departcoef/beta1,beta2
+
 
 	    ntau = nDepth
 
@@ -119,6 +126,17 @@ contains
         	end do
         endif
 
+		nlte = 1
+		ixx=0
+        do l=1,ntl
+	   		do ible=1,nble(l)
+	   			ixx=ixx+1				   
+              		do i=1,ntau
+                 		beta1(ixx,i)=departure(1, ixx, i)  !entran ordenados sobre todas lineas*blends
+                 		beta2(ixx,i)=departure(2, ixx, i)
+	      			end do	 
+           	end do
+        end do
 
 		call StokesFRsub(stok,rt,rp,rh,rv,rg,rf,rm,rmac)
 				 	
@@ -140,9 +158,9 @@ contains
 	end subroutine c_synth
 
 
-	subroutine c_synthrf(nDepth, nLambda, macroturbulence, filling, stray, model, stokes, RFt, RFp, RFh, RFv, RFg, RFf, RFmic, RFmac) bind(c)
-	integer(c_int), intent(in) :: nDepth, nLambda
-	real(c_float), intent(in) :: model(8,ndepth)
+	subroutine c_synthrf(nDepth, nLambda, nLines, macroturbulence, filling, stray, model, departure, stokes, RFt, RFp, RFh, RFv, RFg, RFf, RFmic, RFmac) bind(c)
+	integer(c_int), intent(in) :: nDepth, nLambda, nLines
+	real(c_float), intent(in) :: model(8,ndepth), departure(2, nLines, nDepth)
 	real(c_float), intent(in) :: macroturbulence, filling, stray
 	real(c_float), intent(out) :: stokes(5,nLambda)
 	real(c_float), intent(out), dimension(4,nLambda,nDepth) :: RFt, RFp, RFh, RFv, RFg, RFf, RFmic	
@@ -159,6 +177,10 @@ contains
 	real*4 tau(kt),t(kt),pe(kt),pg(kt),z(kt),ro(kt)
 	real*4 atmosmodel(kt8), pesostray
 	real*4 voffset,xmu
+	real*4 beta1(kl,kt),beta2(kl,kt)
+
+	integer :: ixx, ible, nlte
+
 	common/Malla/ntl,nlin,npas,nble,dlamda  !common para StokesFRsub
     common/OutputStokes/Stokesfilename
 
@@ -166,6 +188,8 @@ contains
 	common/numeronodos/mnodos         !para StokesFRsub
     common/offset/voffset             !para StokesFRsub
     common/anguloheliocent/xmu        !para StokesFRsub
+	common/nlte/nlte
+    common/departcoef/beta1,beta2
 
 	    ntau = nDepth
 
@@ -204,6 +228,18 @@ contains
             	atmosmodel(i+2*ntau)=pe(i)
         	end do
         endif
+
+		nlte = 1
+		ixx=0
+        do l=1,ntl
+	   		do ible=1,nble(l)
+	   			ixx=ixx+1				   
+              		do i=1,ntau
+                 		beta1(ixx,i)=departure(1, ixx, i)  !entran ordenados sobre todas lineas*blends
+                 		beta2(ixx,i)=departure(2, ixx, i)
+	      			end do	 
+           	end do
+        end do
 
 		call StokesFRsub(stok,rt,rp,rh,rv,rg,rf,rm,rmac)		
 		 	

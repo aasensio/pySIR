@@ -4,21 +4,24 @@ import pysir
 import time
 from tqdm import tqdm
 
-pysir.list_lines()
-l = [['1',-500,10,1500]]
-nLambda = pysir.initialize(l)
+l = [['200,201',-500,10,1500]]
+SIR = pysir.SIR(l)
+
 psf = np.loadtxt('PSF.dat', dtype=np.float32)
-pysir.set_PSF(psf[:,0].flatten(), psf[:,1].flatten())
+SIR.set_PSF(psf[:,0].flatten(), psf[:,1].flatten())
 out = np.loadtxt('model.mod', dtype=np.float32, skiprows=1)[:,0:8]
 out = np.delete(out, 2, axis=1)    
-stokes, rf = pysir.synthesize(out)
+
+departure = np.ones((2, SIR.nLines, out.shape[0]), dtype=np.float32)
+
+stokes, rf = SIR.synthesize(out, departure=departure)
 
 nz = out.shape[0]
-rf_numerical = np.zeros((4,nLambda,nz))
+rf_numerical = np.zeros((4, SIR.nLambda, nz))
 for i in tqdm(range(73)):
     out_new = np.copy(out)
     out_new[i,1] += 1.0
-    stokes_new = pysir.synthesize(out_new, returnRF=False)
+    stokes_new = SIR.synthesize(out_new, departure=departure, returnRF=False)
     rf_numerical[:,:,i] = (stokes_new[1:,:] - stokes[1:,:]) / 1.0
 
 f, ax = pl.subplots(ncols=4, nrows=3, figsize=(16,8))
