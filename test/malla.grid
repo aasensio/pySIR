@@ -5,4 +5,4 @@ IMPORTANT: a) All items must be separated by commas.
 Line and blends indices   :   Initial lambda     Step     Final lambda 
 (in this order)                    (mA)          (mA)         (mA)     
 -----------------------------------------------------------------------
-1            :  -500, 10, 1500
+300            :  -3500, 10, 3500

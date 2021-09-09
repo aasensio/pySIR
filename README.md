@@ -72,9 +72,9 @@ In case the electron pressure is to be computed in hydrostatic equilibrium, the 
     
     - log tau
     - Temperature [K]    
-    - Microturbulent velocity [km/s]
+    - Microturbulent velocity [cm/s]
     - Magnetic field strength or Bx (in cartesian) [G]
-    - Line-of-sight velocity [km/s]
+    - Line-of-sight velocity [cm/s]
     - Magnetic field inclination [deg] or By [deg] (in cartesian)
     - Magnetic field azimuth [deg] or Bz [deg] (in cartesian)
 
@@ -85,9 +85,9 @@ If the electron pressure is known, the model has the following structure:
     - log tau
     - Temperature [K]
     - Electron pressure [dyn cm^-2]
-    - Microturbulent velocity [km/s]
+    - Microturbulent velocity [cm/s]
     - Magnetic field strength or Bx (in cartesian) [G]
-    - Line-of-sight velocity [km/s]
+    - Line-of-sight velocity [cm/s]
     - Magnetic field inclination [deg] or By [deg] (in cartesian) 
     - Magnetic field azimuth [deg] or Bz [deg] (in cartesian)
 
@@ -97,7 +97,7 @@ An array of size `[2, nLines, nDepth]` that contains the departure coefficient (
 
 ###### macroturbulence
 
-Macroturbulence velocity in km/s. This velocity defines a Gaussian kernel that will convolve the final spectrum.
+Macroturbulence velocity in cm/s. This velocity defines a Gaussian kernel that will convolve the final spectrum.
 
 ###### fillingFactor
 
